@@ -1,2 +1,2 @@
 # printf
-it is a group task repository
+it is a group task repository about printf function in C
