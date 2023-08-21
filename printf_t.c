@@ -45,10 +45,10 @@ int _printf(const char *format, ...)
 			else if (*format == 's')/*if format is %s print string*/
 			{
 				char *str = va_arg(args, char*);
-					int str_len = 0;
+					int str_len = strlen(str);
 
-				while (str[str_len] != '\0')
-				       str_len++;
+				/*while (str[str_len] != '\0')
+					str_len++;*/
 
 				write(1, str, str_len);
 				count += str_len;
