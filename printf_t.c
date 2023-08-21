@@ -10,6 +10,7 @@
 int _printf(const char *format, ...)
 {
 	int count = 0;
+	char buffer[100];
 	va_list args;
 
 	/* if the format is NULL, exit with error message*/
@@ -45,11 +46,12 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 's')/*if format is %s print string*/
 			{
-				char *str = va_arg(args, char*);
-					int str_len = strlen(str);
+				  char *str_arg = va_arg(args, char *);
+                total_written += snprintf(buffer + total_written, sizeof(buffer) - total_written, "%s", str_arg);				/*char *str = va_arg(args, char*);
+				*	int str_len = strlen(str);
 
-				write(1, str, str_len);
-				count += str_len;
+				*write(1, str, str_len);
+				*count += str_len;*/
 			}
 			else if (*format == 'd' || *format == 'i')
 			{
