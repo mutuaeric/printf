@@ -53,27 +53,15 @@ int _printf(const char *format, ...)
 				write(1, str, str_len);
 				count += str_len;
 			}
-			else if (*format == 'd')/*if format is %d print integer*/
+			else if (*format == 'd' || *format == 'i')
 			{
 				int d = va_arg(args, int);
-					/*int int_len = 0;
+				/* Use a temporary buffer to convert the int to string*/
+				char buffer[20]; /* Adjust size as needed*/
+				int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
 
-				while (d[int_len] != '\0')
-					int_len++;*/
-
-				write(1, &d, 1);
-				count++;
-			}
-			else if (*format == 'i')/*if format is %i print long int*/
-			{
-				long int i = va_arg(args, int);
-					/*int l_int_len = 0;
-
-				while (i[l_int_len] != '\0')
-					l_int_len++;*/
-
-				write(1, &i, 1);
-				count++;
+				write(1, buffer, int_len);
+				count += int_len;
 			}
 		}
 		format++;
