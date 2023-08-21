@@ -48,9 +48,6 @@ int _printf(const char *format, ...)
 				char *str = va_arg(args, char*);
 					int str_len = strlen(str);
 
-				/*while (str[str_len] != '\0')
-					str_len++;*/
-
 				write(1, str, str_len);
 				count += str_len;
 			}
