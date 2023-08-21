@@ -1,8 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
-#include <unistd.h>
-#include <string.h>
-
 /**
  * _printf - produces output according to a format
  * @format:input
