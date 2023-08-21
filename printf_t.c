@@ -30,11 +30,11 @@ int _printf(const char *format, ...)
 			format++;
 			if (*format == '\0')
 				break;
-			if (*format == '%') /*if format is %% print %*/
+			/*if (*format == '%') *if format is %% print %*
 			{
 				write(1, format, 1);
 				count++;
-			}
+			}*/
 			else if (*format == 'c')/*if format is %c print characters*/
 			{
 				char c = va_arg(args, int);
@@ -57,7 +57,7 @@ int _printf(const char *format, ...)
 			{
 				int d = va_arg(args, int);
 				/* Use a temporary buffer to convert the int to string*/
-				char buffer[20];
+				char buffer[12];
 				int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
 
 				write(1, buffer, int_len);
