@@ -55,7 +55,7 @@ int _printf(const char *format, ...)
 			{
 				int d = va_arg(args, int);
 				/* Use a temporary buffer to convert the int to string*/
-				char buffer[12];
+				char buffer[20];
 				int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
 
 				write(1, buffer, int_len);
