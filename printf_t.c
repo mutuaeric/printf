@@ -1,4 +1,8 @@
 #include "main.h"
+#include <stdarg.h>
+#include <unistd.h>
+#include <string.h>
+
 /**
  * _printf - produces output according to a format
  * @format:input
@@ -30,11 +34,11 @@ int _printf(const char *format, ...)
 			format++;
 			if (*format == '\0')
 				break;
-			/*if (*format == '%') *if format is %% print %*
+			if (*format == '%') /*if format is %% print %*/
 			{
 				write(1, format, 1);
 				count++;
-			}*/
+			}
 			else if (*format == 'c')/*if format is %c print characters*/
 			{
 				char c = va_arg(args, int);
