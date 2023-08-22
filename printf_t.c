@@ -1,4 +1,10 @@
 #include "main.h"
+/*
+ * _print_int - print integer
+ *@d: integer input
+ * @int_len: length of the integer
+ */
+int _print_int(int d, int int_len)
 /**
  * _printf - produces output according to a format
  * @format:input
@@ -40,7 +46,28 @@ int _printf(const char *format, ...)
 
 				write(1, str, str_len);
 				count += str_len; }
+			else if (*format == 'd' || *format == 'i')
+				_print_int(int d, int int_len);
 		} format++; }
 	va_end(args);
 	return (count);
+}
+
+/*
+ * _print_int - print integer
+ *@d: integer input
+ * @int_len: length of the integer
+ */
+
+int _print_int(int d, int int_len)
+{
+	if (*format == 'd' || *format 	== 'i')
+	{
+		int d = va_arg(args, int);
+		char buffer[20];
+		int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
+
+		write(1, buffer, int_len);
+		count += int_len;
+	}
 }
