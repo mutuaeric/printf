@@ -61,9 +61,9 @@ int _printf(const char *format, ...)
 				write(1, buffer, int_len);
 				count += int_len;
 			}
-			else 
-				write(1, format, 1);
-				count++;
+			/*else 
+			*	write(1, format, 1);
+			*	count++;*/
 		}
 		format++;
 	}
