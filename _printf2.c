@@ -30,10 +30,10 @@ int _printf(const char *format, ...)
 		else
 		{
 			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &k);
-			width = get_width(format, &k, args);
-			precision = get_precision(format, &k, args);
-			size = get_size(format, &k);
+			flags = _flags(format, &k);
+			width = _width(format, &k, args);
+			precision = _precision(format, &k, args);
+			size = _size(format, &k);
 			++k;
 			count = handle_print(format, &k, args, buffer,
 				flags, width, precision, size);
