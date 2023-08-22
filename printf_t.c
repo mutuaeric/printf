@@ -49,6 +49,7 @@ int _printf(const char *format, ...)
 				write(1, buffer, int_len);
 				count += int_len;
 			}
-		} format++;
+		} format++; }
 	va_end(args);
-	return (count); }
+	return (count);
+}
