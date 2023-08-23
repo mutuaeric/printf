@@ -7,5 +7,6 @@
 
 int _putchar(char c);
 int _printf(const char *format, ...);
+int print_binary_to_buffer(char *buffer, unsigned int num);
 
 #endif

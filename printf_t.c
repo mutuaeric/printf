@@ -8,21 +8,31 @@
  */
 int _printf(const char *format, ...)
 {
-	int count = 0;
+	int i, count = 0;
 	va_list args;
-	char buffer[1024]; /* Local buffer */
-	int buffer_index = 0; /* Index for buffer */
+	char buffer[1024];  /* Local buffer */
 
 	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
 
+	char *buffer_ptr = buffer;
 	while (*format)
 	{
 		if (*format != '%')
 		{
-			buffer[buffer_index++] = *format;
+			if (count >= 1023)  /* Flush buffer */
+			{
+				*buffer_ptr = '\0';
+				buffer_ptr = buffer;
+				write(1, buffer, count);
+				buffer_ptr = buffer;
+				count = 0;
+			}
+
+			*buffer_ptr = *format;
+			buffer_ptr++;
 			count++;
 		}
 		else
@@ -33,13 +43,31 @@ int _printf(const char *format, ...)
 
 			if (*format == '%')
 			{
-				buffer[buffer_index++] = *format;
+				if (count >= 1023)
+				{
+					*buffer_ptr = '\0';
+					write(1, buffer, count);
+					buffer_ptr = buffer;
+					count = 0;
+				}
+
+				*buffer_ptr = '%';
+				buffer_ptr++;
 				count++;
 			}
 			else if (*format == 'c')
 			{
 				char c = va_arg(args, int);
-				buffer[buffer_index++] = c;
+				if (count >= 1023)
+				{
+					*buffer_ptr = '\0';
+					write(1, buffer, count);
+					buffer_ptr = buffer;
+					count = 0;
+				}
+
+				*buffer_ptr = c;
+				buffer_ptr++;
 				count++;
 			}
 			else if (*format == 's')
@@ -48,57 +76,61 @@ int _printf(const char *format, ...)
 				int str_len = 0;
 
 				while (str[str_len] != '\0')
-				{
-					buffer[buffer_index++] = str[str_len];
 					str_len++;
+
+				if (count + str_len >= 1023)
+				{
+					*buffer_ptr = '\0';
+					write(1, buffer, count);
+					buffer_ptr = buffer;
+					count = 0;
 				}
-				count += str_len;
+
+				for (i = 0; i < str_len; i++)
+				{
+					*buffer_ptr = str[i];
+					buffer_ptr++;
+					count++;
+				}
 			}
 			else if (*format == 'd' || *format == 'i')
 			{
 				int d = va_arg(args, int);
-				char num_buffer[20]; /* Adjust size as needed */
+				char num_buffer[20];
 				int int_len = snprintf(num_buffer, sizeof(num_buffer), "%d", d);
-				int i;
+
+				if (count + int_len >= 1023)
+				{
+					*buffer_ptr = '\0';
+					write(1, buffer, count);
+					buffer_ptr = buffer;
+					count = 0;
+				}
 
 				for (i = 0; i < int_len; i++)
-					buffer[buffer_index++] = num_buffer[i];
-
-				count += int_len;
+				{
+					*buffer_ptr = num_buffer[i];
+					buffer_ptr++;
+					count++;
+				}
 			}
-			else if (*format == 'b') /* Handling 'b' specifier */
+			else if (*format == 'b')
 			{
 				unsigned int num = va_arg(args, unsigned int);
-				char bin_str[33]; /* Binary representation 32 bits + null */
-				int i, bin_len;
-
-				for (i = 31; i >= 0; i--)
-				{
-					bin_str[31 - i] = (num & (1 << i)) ? '1' : '0';
-				}
-				bin_str[32] = '\0';
-				bin_len = 32;
-
-				for (i = 0; i < bin_len; i++)
-					buffer[buffer_index++] = bin_str[i];
-
-				count += bin_len;
+				int len = print_binary_to_buffer(buffer_ptr, num);
+				buffer_ptr += len;
+				count += len;
 			}
-		}
-
-		/* Check if the buffer is full */
-		if ((unsigned int)buffer_index >= sizeof(buffer))
-		{
-			write(1, buffer, buffer_index);
-			buffer_index = 0; /* Reset buffer index */
 		}
 
 		format++;
 	}
 
-	/* Output remaining content in the buffer */
-	if (buffer_index > 0)
-		write(1, buffer, buffer_index);
+	if (count > 0)
+	{
+		*buffer_ptr = '\0';
+		write(1, buffer, count);
+	}
 
 	va_end(args);
 	return (count);
