@@ -1,6 +1,46 @@
 #include "main.h"
 
 /**
+ * print_binary_to_buffer - Converts an unsigned int to binary
+ * @buffer: The buffer to store the binary representation
+ * @num: The unsigned int to be converted
+ *
+ * Return: Number of characters added to buffer
+ */
+int print_binary_to_buffer(char *buffer, unsigned int num)
+{
+	int count = 0;
+	unsigned int mask = 1 << (sizeof(unsigned int) * 8 - 1);
+	int leading_zeros = 1;
+
+	while (mask > 0)
+	{
+		if (num & mask)
+		{
+			leading_zeros = 0;
+			*buffer = '1';
+			buffer++;
+			count++;
+		}
+		else if (!leading_zeros)
+		{
+			*buffer = '0';
+			buffer++;
+			count++;
+		}
+		mask >>= 1;
+	}
+
+	if (leading_zeros)
+	{
+		*buffer = '0';
+		buffer++;
+		count++;
+	}
+
+	return (count);
+}
+/**
  * _printf - Produces output according to a format
  * @format: Input format string
  *
@@ -57,8 +97,16 @@ int _printf(const char *format, ...)
 				int d = va_arg(args, int);
 				char buffer[20];
 				int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
+
 				write(1, buffer, int_len);
 				count += int_len;
+			}
+			else if (*format == 'b')
+			{
+				unsigned int num = va_arg(args, unsigned int);
+				int len = print_binary_to_buffer(buffer_ptr, num);
+				buffer_ptr += len;
+				count += len;
 			}
 		}
 		format++;
