@@ -50,11 +50,13 @@ int _printf(const char *format, ...)
 {
 	int count = 0;
 	va_list args;
+	char buffer[1024];
 
 	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
+	char *buffer_ptr = buffer;
 
 	while (*format)
 	{
@@ -95,10 +97,10 @@ int _printf(const char *format, ...)
 			else if (*format == 'd' || *format == 'i')
 			{
 				int d = va_arg(args, int);
-				char buffer[20];
+				char num_buffer[20];
 				int int_len = snprintf(buffer, sizeof(buffer), "%d", d);
 
-				write(1, buffer, int_len);
+				write(1, num_buffer, int_len);
 				count += int_len;
 			}
 			else if (*format == 'b')
